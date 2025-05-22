@@ -33,6 +33,7 @@ Aplicação backend para rastreamento em tempo real de entregas utilizando:
 
 ## 🗂 Estrutura de Pastas
 
+```bash
 /tracking-service
 │
 ├── public/ # Mapa estático (HTML + Leaflet)
@@ -50,7 +51,7 @@ Aplicação backend para rastreamento em tempo real de entregas utilizando:
 ├── package.json
 ├── tsconfig.json
 └── README.md
-
+```
 ## 🧪 Instalação
 
 ```bash
