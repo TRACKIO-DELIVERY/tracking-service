@@ -3,9 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Rastreamento Pedido</title>
+
+    <style>
+      #map {
+        width: 100%;
+        height: 100vh;
+      }
+    </style>
   </head>
   <body>
-    <h1>Hello, World!</h1>
+    <div id="map"></div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module">
+      window.initApp = async () => {
+        const { initMap } = await import('/js/mapSetup.js');
+        const { showRoutePreview } = await import('/js/routePreview.js');
+        const { startMockTrajectory } = await import('/js/mockTrajectory.js');
+
+        const map = initMap(-23.561399, -46.655881);
+
+        showRoutePreview(map, {
+          origem: { lat: -23.5618, lng: -46.6562 },
+          destino: { lat: -23.5608, lng: -46.6547 },
+        });
+      };
+    </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&libraries=maps&v=beta&callback=initApp"
+      defer
+    ></script>
   </body>
 </html>
