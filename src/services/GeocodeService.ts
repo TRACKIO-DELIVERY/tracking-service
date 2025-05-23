@@ -5,18 +5,18 @@ export class GeocodeService {
   static async addressToCoords(
     address: string,
   ): Promise<{ lat: number; lng: number }> {
-    const apiKey = env.GEOCODING_API_KEY;
+    const apiKey = env.GOOGLE_GEOCODING_KEY;
     const response = await axios.get(
-      'https://api.opencagedata.com/geocode/v1/json',
+      'https://maps.googleapis.com/maps/api/geocode/json?',
       {
         params: {
-          q: address,
+          address: address,
           key: apiKey,
         },
       },
     );
 
-    const { lat, lng } = response.data.results[0].geometry;
+    const { lat, lng } = response.data.results[0].geometry.location;
     return { lat, lng };
   }
 }

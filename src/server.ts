@@ -3,6 +3,7 @@ import http from 'http';
 import { setupSocket } from './config/socket.js';
 import { env } from './config/env.js';
 import trackingRoutes from './routes/tracking.routes.js';
+import { GeocodeService } from './services/GeocodeService.js';
 
 const app = express();
 const server = http.createServer(app);
