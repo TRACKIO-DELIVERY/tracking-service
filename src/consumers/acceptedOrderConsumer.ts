@@ -4,6 +4,7 @@
 
 import amqp from 'amqplib';
 import { env } from '../config/env';
+import { processAcceptedOrder } from '../services/OrderService';
 
 const RABBITMQ_URL = env.RABBITMQ_URL;
 const QUEUE_NAME = 'accepted.order';
@@ -19,7 +20,7 @@ export async function startAcceptedOrderConsumer() {
       try {
         const data = JSON.parse(msg.content.toString());
 
-        //processar
+        processAcceptedOrder(data);
 
         channel.ack(msg);
       } catch (error) {

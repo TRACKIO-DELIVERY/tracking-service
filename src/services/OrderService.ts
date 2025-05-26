@@ -1,4 +1,4 @@
-import { db } from '../config/database';
+import { db } from '../config/database.js';
 import { Order } from '../interfaces/order';
 
 export function createTrackingTable(data: Order) {
@@ -36,9 +36,10 @@ export function updateOrderTable(
 
   const values = [deliverPerson, orderStatus, orderId];
 
+  //atualizar o pedido no django tambem quando tiver a rota
   db.query(query, values);
 }
-export async function processAcceptedOrder(data: Order, res: Response) {
+export async function processAcceptedOrder(data: Order) {
   console.log(data);
 
   //TODO:

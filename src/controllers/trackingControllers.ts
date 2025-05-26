@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import path from 'path';
-import { updateOrderTable } from '../services/OrderService';
+import { updateOrderTable } from '../services/OrderService.js';
 
 export function renderDeliveryMap(req: Request, res: Response) {
   res.sendFile(path.resolve('public', 'map.html'));
@@ -15,6 +15,7 @@ export async function setDeliverPerson(req: Request, res: Response) {
     });
   }
 
+  console.log('Entregador enviado: ', deliverPersonId);
   try {
     await updateOrderTable(orderId, deliverPersonId, 'En Route');
     res.status(200).json({

@@ -3,7 +3,6 @@ import http from 'http';
 import { setupSocket } from './config/socket.js';
 import { env } from './config/env.js';
 import trackingRoutes from './routes/tracking.routes.js';
-import { getDeliveryPerson } from './store/deliveryPersonStore.js';
 
 const app = express();
 const server = http.createServer(app);
@@ -18,7 +17,4 @@ setupSocket(server);
 const PORT = env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Servidor ouvindo na porta ${PORT}`);
-
-  const delivery = getDeliveryPerson('1');
-  console.log(delivery);
 });
