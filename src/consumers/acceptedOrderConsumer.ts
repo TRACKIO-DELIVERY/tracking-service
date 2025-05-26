@@ -4,7 +4,6 @@
 
 import amqp from 'amqplib';
 import { env } from '../config/env';
-import { json } from 'stream/consumers';
 
 const RABBITMQ_URL = env.RABBITMQ_URL;
 const QUEUE_NAME = 'accepted.order';
