@@ -39,7 +39,8 @@ export function updateOrderTable(
   //atualizar o pedido no django tambem quando tiver a rota
   db.query(query, values);
 }
-export async function processAcceptedOrder(data: Order) {
+
+export function processAcceptedOrder(data: Order) {
   console.log(data);
 
   //TODO:
