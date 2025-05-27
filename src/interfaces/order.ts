@@ -1,4 +1,4 @@
-interface Coord {
+export interface Coord {
   latitude: string;
   longitude: string;
 }

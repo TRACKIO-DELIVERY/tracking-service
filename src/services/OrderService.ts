@@ -1,7 +1,12 @@
 import { db } from '../config/database.js';
 import { Order } from '../interfaces/order';
+import { GeocodeService } from './GeocodeService.js';
 
-export function createTrackingTable(data: Order) {
+//refatorar essa, ter q fazer chamda api django pra acessar o endereço
+//converter pra coords e depois mandar a tabela
+export function createTrackingTable(orderId: string) {
+  const { originCoords, destinationCoords } = convertAdressToCoords();
+
   const query = `INSERT INTO ordertracking 
     (
         order, 
@@ -12,18 +17,22 @@ export function createTrackingTable(data: Order) {
         event_status
     ) VALUES ($1, $2, $3, $4, $5, $6) `;
 
-  const values = [
-    data.id,
-    data.origin.latitude,
-    data.origin.longitude,
-    data.destination.latitude,
-    data.destination.longitude,
-    'En Route',
-  ];
+  //arrumar isso
+  const values = [orderId, originCoords, destinationCoords, 'En Route'];
 
   db.query(query, values);
 }
 
+export function convertAdressToCoords() {
+  //fazer chamada django agui
+  const originAddress = '';
+  const destinationAddress = '';
+
+  const originCoords = GeocodeService.addressToCoords(originAddress);
+  const destinationCoords = GeocodeService.addressToCoords(destinationAddress);
+
+  return { originCoords, destinationCoords };
+}
 export function updateOrderTable(
   orderId: string,
   deliverPerson: string,
@@ -47,5 +56,5 @@ export function processAcceptedOrder(data: Order) {
   //- Criar tabela de rastreio pedido (FEITO)
   //- Converter o endereço para coordenadas, e usar ele no mapa.html (como fazer isso?)
 
-  createTrackingTable(data);
+  createTrackingTable(data.id);
 }
