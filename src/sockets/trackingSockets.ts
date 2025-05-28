@@ -1,8 +1,10 @@
 import { Server } from 'socket.io';
 import { Server as HttpServer } from 'http';
 
+let io: Server;
+
 export function registerTrackingSocket(server: HttpServer) {
-  const io = new Server(server, {
+  io = new Server(server, {
     cors: {
       origin: '*', // pode restringir em produção
     },
@@ -12,7 +14,7 @@ export function registerTrackingSocket(server: HttpServer) {
     console.log(`Nova conexão: ${socket.id}`);
 
     // Entra em uma sala baseada no ID do pedido
-    socket.on('join_order', ({ orderId }: { orderId: string }) => {
+    socket.on(`join_order`, ({ orderId }: { orderId: string }) => {
       socket.join(orderId);
       console.log(`${socket.id} entrou na sala ${orderId}`);
     });
@@ -20,13 +22,7 @@ export function registerTrackingSocket(server: HttpServer) {
     // Atualização de localização do entregador
     socket.on(
       'location_update',
-      ({
-        orderId,
-        coords,
-      }: {
-        orderId: string;
-        coords: { latitude: number; longitude: number };
-      }) => {
+      (orderId: string, coords: { latitude: number; longitude: number }) => {
         socket.to(orderId).emit('location_update', coords);
         console.log(
           `latitude: ${coords.latitude}, longitude: ${coords.longitude}`,
@@ -34,8 +30,18 @@ export function registerTrackingSocket(server: HttpServer) {
       },
     );
 
+    //sala que emite quando a rota pode ser iniciada
+    socket.on('route_ready', (orderId: string, deliverPerson: string) => {
+      socket.join(orderId);
+    });
+
     socket.on('disconnect', () => {
       console.log(`Desconectado: ${socket.id}`);
     });
   });
+}
+
+export function getIO() {
+  if (!io) throw new Error('Socket não inicializado');
+  return io;
 }

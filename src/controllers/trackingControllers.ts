@@ -16,7 +16,6 @@ export async function setDeliverPerson(req: Request, res: Response) {
     });
   }
 
-  console.log('Entregador enviado: ', deliverPersonId);
   try {
     await updateOrderTable(orderId, deliverPersonId, 'En Route');
     res.status(200).json({

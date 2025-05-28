@@ -1,12 +1,9 @@
 import { db } from '../config/database.js';
 import { Order } from '../interfaces/order';
-import { GeocodeService } from './GeocodeService.js';
+import { getIO } from '../sockets/trackingSockets.js';
 
-//refatorar essa, ter q fazer chamda api django pra acessar o endereço
-//converter pra coords e depois mandar a tabela
-export function createTrackingTable(orderId: string) {
-  const { originCoords, destinationCoords } = convertAdressToCoords();
-
+//refatorar essa, coordenadas ja devem vir no pedido
+export async function createTrackingTable(data: Order) {
   const query = `INSERT INTO ordertracking 
     (
         order, 
@@ -18,21 +15,19 @@ export function createTrackingTable(orderId: string) {
     ) VALUES ($1, $2, $3, $4, $5, $6) `;
 
   //arrumar isso
-  const values = [orderId, originCoords, destinationCoords, 'En Route'];
+  const values = [
+    data.id,
+    data.origin.latitude,
+    data.origin.longitude,
+    data.destination.latitude,
+    data.destination.longitude,
+    'En Route',
+  ];
 
   db.query(query, values);
 }
 
-export function convertAdressToCoords() {
-  //fazer chamada django agui
-  const originAddress = '';
-  const destinationAddress = '';
-
-  const originCoords = GeocodeService.addressToCoords(originAddress);
-  const destinationCoords = GeocodeService.addressToCoords(destinationAddress);
-
-  return { originCoords, destinationCoords };
-}
+//essa função é chamda no controller
 export function updateOrderTable(
   orderId: string,
   deliverPerson: string,
@@ -53,8 +48,11 @@ export function processAcceptedOrder(data: Order) {
   console.log(data);
 
   //TODO:
-  //- Criar tabela de rastreio pedido (FEITO)
-  //- Converter o endereço para coordenadas, e usar ele no mapa.html (como fazer isso?)
+  //- Criar tabela de rastreio pedido (FEITO)?
 
-  createTrackingTable(data.id);
+  createTrackingTable(data);
+
+  //aqui emitir talvez? quando a rota estiver pronta
+  const io = getIO();
+  //io.emit('route_ready').{data.id}
 }
