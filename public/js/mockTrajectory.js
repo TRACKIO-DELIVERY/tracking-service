@@ -20,11 +20,8 @@ export function startMockTrajectory(map, orderId = 1) {
         map,
         title: 'Entregador',
         icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 8,
-          fillColor: '#FF0000',
-          fillOpacity: 1,
-          strokeWeight: 1,
+          url: '/img/deliverPerson.png',
+          scaledSize: new google.maps.Size(40, 40),
         },
       });
     } else {
