@@ -22,7 +22,11 @@ export function registerTrackingSocket(server: HttpServer) {
     // Atualização de localização do entregador
     socket.on(
       'location_update',
-      (orderId: string, coords: { latitude: number; longitude: number }) => {
+      (data: {
+        orderId: string;
+        coords: { latitude: number; longitude: number };
+      }) => {
+        const { orderId, coords } = data;
         socket.to(orderId).emit('location_update', coords);
         console.log(
           `latitude: ${coords.latitude}, longitude: ${coords.longitude}`,

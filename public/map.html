@@ -22,16 +22,18 @@
         const { showRoutePreview } = await import('/js/routePreview.js');
         const { startMockTrajectory } = await import('/js/mockTrajectory.js');
 
-        const map = initMap(-23.561399, -46.655881);
+        const map = initMap(-6.146837279661337, -38.20538841712638);
 
         showRoutePreview(map, {
-          origem: { lat: -23.5618, lng: -46.6562 },
-          destino: { lat: -23.5608, lng: -46.6547 },
+          origem: { lat: -6.146837279661337, lng: -38.20538841712638 },
+          destino: { lat: -6.145327875209893, lng: -38.20398830396341 },
         });
+
+        startMockTrajectory(map, 1);
       };
     </script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&libraries=maps&v=beta&callback=initApp"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOtpSq1e2acadIZ4D5-VXvXIfAAITSCVw&libraries=maps&v=beta&callback=initApp"
       defer
     ></script>
   </body>
