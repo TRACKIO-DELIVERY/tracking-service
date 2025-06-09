@@ -1,11 +1,14 @@
 import { Router } from 'express';
-import { renderDeliveryMap } from '../controllers/trackingControllers.js';
+import {
+  getTrackingCoords,
+  renderDeliveryMap,
+  setDeliverPerson,
+} from '../controllers/trackingControllers.js';
 
 const router = Router();
 
 router.get('/map/:orderId', renderDeliveryMap);
-
-//rota de preview da rota do mapa
-//rota do id e entregador associado ??
+router.post('/track/set-deliver-person', setDeliverPerson);
+router.get('/track/route-preview', getTrackingCoords);
 
 export default router;

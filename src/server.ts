@@ -3,7 +3,7 @@ import http from 'http';
 import { setupSocket } from './config/socket.js';
 import { env } from './config/env.js';
 import trackingRoutes from './routes/tracking.routes.js';
-import { GeocodeService } from './services/GeocodeService.js';
+
 import path from 'path';
 
 const app = express();
@@ -11,7 +11,7 @@ const server = http.createServer(app);
 
 app.use(express.json());
 app.use(express.static(path.resolve('public')));
-app.use('/', trackingRoutes);
+app.use('/api/', trackingRoutes);
 
 setupSocket(server);
 //iniciar aqui tambem o consumer do rabbit
