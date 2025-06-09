@@ -1,31 +1,31 @@
-import { db } from '../config/database.js';
-import { Order } from '../interfaces/order';
-import { getIO } from '../sockets/trackingSockets.js';
+import { db } from '../config/database.ts';
+//import { Order } from '../interfaces/order.ts';
+import { getIO } from '../sockets/trackingSockets.ts';
 
 //refatorar essa, coordenadas ja devem vir no pedido
-export async function createTrackingTable(data: Order) {
-  const query = `INSERT INTO ordertracking 
-    (
-        order, 
-        start_latitude, 
-        start_longitude, 
-        end_latitude, 
-        end_longitude,
-        event_status
-    ) VALUES ($1, $2, $3, $4, $5, $6) `;
+// export async function createTrackingTable(data: Order) {
+//   const query = `INSERT INTO ordertracking
+//     (
+//         order,
+//         start_latitude,
+//         start_longitude,
+//         end_latitude,
+//         end_longitude,
+//         event_status
+//     ) VALUES ($1, $2, $3, $4, $5, $6) `;
 
-  //arrumar isso
-  const values = [
-    data.id,
-    data.origin.latitude,
-    data.origin.longitude,
-    data.destination.latitude,
-    data.destination.longitude,
-    'En Route',
-  ];
+//   //arrumar isso
+//   const values = [
+//     data.id,
+//     data.origin.latitude,
+//     data.origin.longitude,
+//     data.destination.latitude,
+//     data.destination.longitude,
+//     'En Route',
+//   ];
 
-  db.query(query, values);
-}
+//   db.query(query, values);
+// }
 
 //essa função é chamda no controller
 export function updateOrderTable(
@@ -44,13 +44,13 @@ export function updateOrderTable(
   db.query(query, values);
 }
 
-export function processAcceptedOrder(data: Order) {
+export function processAcceptedOrder(data: any) {
   console.log(data);
 
   //TODO:
   //- Criar tabela de rastreio pedido (FEITO)?
 
-  createTrackingTable(data);
+  //createTrackingTable(data);
 
   //aqui emitir talvez? quando a rota estiver pronta
   const io = getIO();

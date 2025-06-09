@@ -1,8 +1,16 @@
-import { Request, Response } from 'express';
 import path from 'path';
-import { updateOrderTable } from '../services/OrderService.js';
-import { db } from '../config/database.js';
+import express from 'express' 
 
+import { updateOrderTable } from '../services/OrderService.ts';
+import { db } from '../config/database.ts';
+
+type Response =  express.Response
+type Request = express.Request
+
+
+export function getHealth(req: Request, res: Response) {
+  res.status(200).json({message:'OK'});
+}
 export function renderDeliveryMap(req: Request, res: Response) {
   res.sendFile(path.resolve('public', 'map.html'));
 }
