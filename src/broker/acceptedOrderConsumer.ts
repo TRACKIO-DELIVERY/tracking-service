@@ -3,8 +3,8 @@
 //atualizado a tabela pedido com o entregador associado
 
 import amqp from 'amqplib';
-import { env } from '../config/env';
-import { processAcceptedOrder } from '../services/OrderService';
+import { env } from '../config/env.ts';
+import { processAcceptedOrder } from '../services/OrderService.ts';
 
 const RABBITMQ_URL = env.RABBITMQ_URL;
 const QUEUE_NAME = 'accepted.order';
