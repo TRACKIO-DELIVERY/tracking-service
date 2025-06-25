@@ -1,8 +1,8 @@
 import express from 'express';
 import http from 'http';
-import { setupSocket } from './config/socket.js';
-import { env } from './config/env.js';
-import trackingRoutes from './routes/tracking.routes.js';
+import { setupSocket } from '../config/socket.ts';
+import { env } from '../config/env.ts';
+import trackingRoutes from '../routes/tracking.routes.ts';
 
 import path from 'path';
 

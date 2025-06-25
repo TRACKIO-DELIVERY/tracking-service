@@ -4,9 +4,8 @@ Aplicação backend para rastreamento em tempo real de entregas utilizando:
 
 - 🐇 RabbitMQ para mensagens de localização
 - 📡 Socket.IO para envio em tempo real ao cliente
-- 🗺️ Leaflet para visualização de mapa no frontend
+- 🗺️ Google maps para visualização de mapa no frontend
 - 📦 PostgreSQL para persistência de dados
-- 📍 OpenCage Geocoding API para converter endereços em coordenadas
 
 ---
 
@@ -14,7 +13,7 @@ Aplicação backend para rastreamento em tempo real de entregas utilizando:
 
 - 🔄 Consome mensagens de localização via RabbitMQ
 - 💬 Envia atualizações em tempo real com Socket.IO
-- 📍 Visualiza entregas em um mapa com Leaflet
+- 📍 Visualiza entregas em um mapa com Google maps
 - 🔄 Permite visualização prévia da rota de entrega (geocodificação)
 
 ---
@@ -26,8 +25,7 @@ Aplicação backend para rastreamento em tempo real de entregas utilizando:
 - **PostgreSQL**
 - **RabbitMQ (amqplib)**
 - **Socket.IO**
-- **Leaflet.js**
-- **OpenCage Geocoding API**
+- **Google Maps**
 
 ---
 
@@ -43,6 +41,7 @@ Aplicação backend para rastreamento em tempo real de entregas utilizando:
 │ ├── config/ # Configurações globais
 │ ├── consumers/ # Integração com RabbitMQ
 │ ├── controllers/ # Controladores de rota
+│ ├── http/ #Servidor express HTTP
 │ ├── routes/ # Rotas HTTP
 │ ├── services/ # Lógica de negócio
 │ ├── sockets/ # Integração com Socket.IO
@@ -52,6 +51,7 @@ Aplicação backend para rastreamento em tempo real de entregas utilizando:
 ├── tsconfig.json
 └── README.md
 ```
+
 ## 🧪 Instalação
 
 ```bash
@@ -61,9 +61,6 @@ cd tracking-service
 
 # 2. Instalar dependências
 npm install
-
-# 3. Gerar dist
-npm run build
 
 # 4. Crie um arquivo .env
 
