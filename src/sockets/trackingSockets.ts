@@ -1,5 +1,6 @@
 import { Server } from 'socket.io';
 import { Server as HttpServer } from 'http';
+import { orderInMemo } from '../data/order.ts';
 
 let io: Server;
 
@@ -37,11 +38,22 @@ export function registerTrackingSocket(server: HttpServer) {
     //sala que emite quando a rota pode ser iniciada
     socket.on('route_ready', (orderId: string, deliverPerson: string) => {
       socket.join(orderId);
+      console.log('rota pronta')
     });
 
     socket.on('disconnect', () => {
       console.log(`Desconectado: ${socket.id}`);
     });
+
+    //recebe info que o front se conectou
+    socket.on("request_order_info", ({ orderId }) => {
+      const order = orderInMemo[orderId];
+      if (order) {
+        socket.emit("route_ready", { orderId });
+      }
+      console.log('oi do front')
+    });
+
   });
 }
 

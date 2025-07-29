@@ -1,5 +1,8 @@
 import express from 'express';
 import http from 'http';
+
+//import '../broker/consumer/acceptedOrderConsumer.ts'
+
 import { setupSocket } from '../config/socket.ts';
 import { env } from '../config/env.ts';
 import trackingRoutes from '../routes/tracking.routes.ts';
@@ -14,9 +17,8 @@ app.use(express.static(path.resolve('public')));
 app.use('/api/', trackingRoutes);
 
 setupSocket(server);
-//iniciar aqui tambem o consumer do rabbit
 
 const PORT = env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Servidor ouvindo na porta ${PORT}`);
+server.listen(PORT,  () => {
+  console.log(`Servidor ouvindo na porta: ${PORT}`);
 });
