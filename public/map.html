@@ -21,17 +21,29 @@
         const socket = io("http://localhost:3000");
 
         const { initMap } = await import('/js/mapSetup.js');
+        const { getCoords } = await import ('/js/getCoords.js')
         const { showRoutePreview } = await import('/js/routePreview.js');
         const { startMockTrajectory } = await import('/js/mockTrajectory.js');
 
         console.log(window.location.pathname.split("/").pop())
-        const map = initMap(-6.146837279661337, -38.20538841712638);
+
+        await getCoords()
         
+        const coordsStored =  localStorage.getItem('coords')
+        const coords = JSON.parse(coordsStored)
+        if (!coords){
+          console.log('coords invalidas')
+          return
+        }
+
+        const map = initMap(coords.origin.lat, coords.origin.lng);
+
+        showRoutePreview(map)
+
+
         const orderId = window.location.pathname.split("/").pop()
         socket.emit('join_order', {orderId})
-        socket.on("route_ready", (data) => {
-          console.log("Rota liberada para visualização:", data);
-        });
+        
         let deliverMarker = null;
       socket.on("location_update", (coords) => {
         const { latitude, longitude } = coords;
@@ -60,8 +72,10 @@
       };
     </script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=KEY&libraries=maps&v=beta&callback=initApp"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOtpSq1e2acadIZ4D5-VXvXIfAAITSCVw&libraries=maps&v=beta&callback=initApp"
       defer
     ></script>
   </body>
 </html>
+
+

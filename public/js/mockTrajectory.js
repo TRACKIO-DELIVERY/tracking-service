@@ -1,5 +1,6 @@
 let deliverMarker = null;
 export function startMockTrajectory(map, orderId = 1) {
+
   const socket = io();
   socket.on('connect', () => {
     console.log('Conectado ao servidor de rastreamento');

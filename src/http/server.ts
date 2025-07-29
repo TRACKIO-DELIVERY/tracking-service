@@ -1,8 +1,6 @@
 import express from 'express';
 import http from 'http';
 
-//import '../broker/consumer/acceptedOrderConsumer.ts'
-
 import { setupSocket } from '../config/socket.ts';
 import { env } from '../config/env.ts';
 import trackingRoutes from '../routes/tracking.routes.ts';
