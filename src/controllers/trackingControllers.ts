@@ -5,6 +5,7 @@ import { orderInMemo } from '../data/order.ts';
 import { acceptedOrderSender } from '../broker/sender/acceptedOrderSender.ts';
 import { inRouteOrdersender } from '../broker/sender/inRouteOrderSender.ts';
 import { deliveredOrderSender } from '../broker/sender/deliveredOrderSender.ts';
+import { lastPositionOrderSender } from '../broker/sender/lastPositionOrderSender.ts';
 
 type Response = express.Response;
 type Request = express.Request;
@@ -75,7 +76,7 @@ export async function sendOrderToInRouteQueue(req: Request, res: Response){
       await inRouteOrdersender(data)
 
      res.status(200).json({
-      message: "Order sended to accepted queue",
+      message: "Order sended to in route queue",
     })
   } catch (error) {
     console.error("Error when sending order:", error);
@@ -92,7 +93,24 @@ export async function sendOrderToFinishidQueue(req: Request, res: Response){
       await deliveredOrderSender(data)
 
      res.status(200).json({
-      message: "Order sended to accepted queue",
+      message: "Order sended to delivered queue",
+    })
+  } catch (error) {
+    console.error("Error when sending order:", error);
+    res.status(400).json({
+     error: "Order could not be send", 
+    })
+  }
+}
+
+export async function sendCoordsToLastPositionQueue(req: Request, res: Response){
+  const data = req.body
+
+  try {
+      await lastPositionOrderSender(data)
+
+     res.status(200).json({
+      message: "Order sended to last-position queue",
     })
   } catch (error) {
     console.error("Error when sending order:", error);

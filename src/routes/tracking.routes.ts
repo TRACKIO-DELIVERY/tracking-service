@@ -18,7 +18,8 @@ router.get('/track/route-preview', getTrackingCoords);
 router.post('/track/accepted-order', acceptedOrder)
 router.post('/track/start-route', startRoute)
 router.post('/track/queue/accepted', sendOrderToAccptedQueue)
-router.post('track/queue/in-route', sendOrderToInRouteQueue)
-router.post('track/queue/finished', sendOrderToFinishidQueue)
+router.post('/track/queue/in-route', sendOrderToInRouteQueue)
+router.post('/track/queue/finished', sendOrderToFinishidQueue)
+router.post('/track/queue/last-position')
 
 export default router;
