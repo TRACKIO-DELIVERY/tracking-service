@@ -23,12 +23,11 @@
         const { initMap } = await import('/js/mapSetup.js');
         const { getCoords } = await import ('/js/getCoords.js')
         const { showRoutePreview } = await import('/js/routePreview.js');
-        const { startMockTrajectory } = await import('/js/mockTrajectory.js');
 
-        console.log(window.location.pathname.split("/").pop())
-
+        //-- Salva no localstorage a rota
         await getCoords()
         
+        // -- Inicia mapa e preview com as coords 
         const coordsStored =  localStorage.getItem('coords')
         const coords = JSON.parse(coordsStored)
         if (!coords){
@@ -40,33 +39,34 @@
 
         showRoutePreview(map)
 
-
+        // -- entra na sala do pedido
         const orderId = window.location.pathname.split("/").pop()
-        socket.emit('join_order', {orderId})
+        socket.emit('join_order', orderId)
         
+        // --  adiciona o marcador sempre que é enviada a nova localização
         let deliverMarker = null;
-      socket.on("location_update", (coords) => {
-        const { latitude, longitude } = coords;
+        socket.on("location_update", (coords) => {
+          const { latitude, longitude } = coords;
 
-        const position = { lat: latitude, lng: longitude };
+          const position = { lat: latitude, lng: longitude };
 
-        var newCenter = new google.maps.LatLng(latitude, longitude);
-        map.panTo(newCenter)
+          var newCenter = new google.maps.LatLng(latitude, longitude);
+          map.panTo(newCenter)
 
-        if (!deliverMarker) {
-          deliverMarker = new google.maps.Marker({
-            position,
-            map,
-            title: 'Entregador',
-            icon: {
-              url: '/img/deliverPerson.png',
-              scaledSize: new google.maps.Size(40, 40),
-            },
-          });
-        } else {
-          //att a posição do marcador
-          deliverMarker.setPosition(position);
-        }
+          if (!deliverMarker) {
+            deliverMarker = new google.maps.Marker({
+              position,
+              map,
+              title: 'Entregador',
+              icon: {
+                url: '/img/deliverPerson.png',
+                scaledSize: new google.maps.Size(40, 40),
+              },
+            });
+          } else {
+        
+            deliverMarker.setPosition(position);
+          }
       });
         
       };

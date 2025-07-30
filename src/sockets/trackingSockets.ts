@@ -1,26 +1,28 @@
 import { Server } from 'socket.io';
 import { Server as HttpServer } from 'http';
-import { orderInMemo } from '../data/order.ts';
 
 let io: Server;
 
 export function registerTrackingSocket(server: HttpServer) {
   io = new Server(server, {
     cors: {
-      origin: '*', // pode restringir em produção
+      origin: '*', 
     },
   });
 
   io.on('connection', (socket) => {
     console.log(`Nova conexão: ${socket.id}`);
 
-    // Entra em uma sala baseada no ID do pedido
-    socket.on(`join_order`, ({ orderId }: { orderId: string }) => {
-      socket.join(orderId);
+    // -- Sala do pedido
+    socket.on(`join_order`, (orderId) => {
+
+      const room = `order-${orderId}`
+      socket.join(room);
+
       console.log(`${socket.id} entrou na sala ${orderId}`);
     });
 
-    // Atualização de localização do entregador
+    // -- evento de enviar coords
     socket.on(
       'location_update',
       (data: {
@@ -28,32 +30,29 @@ export function registerTrackingSocket(server: HttpServer) {
         coords: { latitude: number; longitude: number };
       }) => {
         const { orderId, coords } = data;
-        socket.to(orderId).emit('location_update', coords);
+        
+        const room = `order-${orderId}`
         console.log(
           `latitude: ${coords.latitude}, longitude: ${coords.longitude}`,
         );
+
+        // -- server envia para todos nessa sala (a web)
+        io.to(room).emit("location_update", coords )
       },
     );
 
-    //sala que emite quando a rota pode ser iniciada
     socket.on('route_ready', (orderId: string, deliverPerson: string) => {
-      socket.join(orderId);
-      console.log('rota pronta')
+      
+      const room = `order-${orderId}`
+      io.to(room).emit("route_ready", () => {
+        console.log("Rota pronta")
+      })
+
     });
 
     socket.on('disconnect', () => {
       console.log(`Desconectado: ${socket.id}`);
     });
-
-    //recebe info que o front se conectou
-    socket.on("request_order_info", ({ orderId }) => {
-      const order = orderInMemo[orderId];
-      if (order) {
-        socket.emit("route_ready", { orderId });
-      }
-      console.log('oi do front')
-    });
-
   });
 }
 
