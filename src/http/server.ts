@@ -19,4 +19,5 @@ setupSocket(server);
 const PORT = env.PORT || 3000;
 server.listen(PORT,  () => {
   console.log(`Servidor ouvindo na porta: ${PORT}`);
+  console.log('Swagger em http://localhost/api/docs')
 });
