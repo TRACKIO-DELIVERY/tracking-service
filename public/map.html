@@ -24,12 +24,15 @@
         const { getCoords } = await import ('/js/getCoords.js')
         const { showRoutePreview } = await import('/js/routePreview.js');
 
+        const orderId = window.location.pathname.split("/").pop()
+
         //-- Salva no localstorage a rota
-        await getCoords()
+        await getCoords(orderId)
         
         // -- Inicia mapa e preview com as coords 
         const coordsStored =  localStorage.getItem('coords')
         const coords = JSON.parse(coordsStored)
+   
         if (!coords){
           console.log('coords invalidas')
           return
@@ -40,7 +43,7 @@
         showRoutePreview(map)
 
         // -- entra na sala do pedido
-        const orderId = window.location.pathname.split("/").pop()
+    
         socket.emit('join_order', orderId)
         
         // --  adiciona o marcador sempre que é enviada a nova localização

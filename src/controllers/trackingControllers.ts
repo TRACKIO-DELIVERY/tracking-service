@@ -6,6 +6,7 @@ import { acceptedOrderSender } from '../broker/sender/acceptedOrderSender.ts';
 import { inRouteOrdersender } from '../broker/sender/inRouteOrderSender.ts';
 import { deliveredOrderSender } from '../broker/sender/deliveredOrderSender.ts';
 import { lastPositionOrderSender } from '../broker/sender/lastPositionOrderSender.ts';
+import { selectTrackingCoordsByOrderId } from '../db/getTrackingCoords.ts';
 
 type Response = express.Response;
 type Request = express.Request;
@@ -17,30 +18,15 @@ export function renderDeliveryMap(req: Request, res: Response) {
   res.sendFile(path.resolve('public', 'map.html'));
 }
 
-export function getTrackingCoords(req: Request, res: Response) {
-  if (!coordsInMemo){
-    return res.status(404).json({
-      message: "Unable to find coords"
-    })
-  }
+export async function getTrackingCoords(req: Request, res: Response) {
+  const {orderId} = req.body
+
+  const data = await selectTrackingCoordsByOrderId(orderId)
   return res.status(200).json({
-    coords: coordsInMemo
+    coords: data
   })
 }
 
-export function sendTrackingCoords(req:Request, res:Response){
-  const data = req.body
-
-  coordsInMemo["coords"] = {
-    data
-  }
-
-  console.log(coordsInMemo)
-
-  return res.status(200).json({
-      message: "Coords sended with success"
-  })
-}
 export async function acceptedOrder(req:Request, res:Response){
   const {orderId} = req.body
 
@@ -50,7 +36,7 @@ export async function acceptedOrder(req:Request, res:Response){
   orderInMemo[orderId] = {
     orderId
   }
-
+  console.log('order aceita', orderId)
   res.status(200).json({message: "Order accepted"})
 }
 

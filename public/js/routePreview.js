@@ -3,6 +3,7 @@
 export async function showRoutePreview(map) {
   const coordsStored = localStorage.getItem('coords')
   const coords = JSON.parse(coordsStored)
+  
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer({
     suppressMarkers: true,
