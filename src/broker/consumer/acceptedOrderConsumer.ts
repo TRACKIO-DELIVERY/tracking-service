@@ -1,18 +1,20 @@
 import { acceptedOrders } from '../channels/acceptedOrders.ts';
 
-acceptedOrders.consume('order.accepted.queue', async (msg) => {
+export async function acceptedOrdersConsumer(){
+  
+  return acceptedOrders.consume('order.accepted.queue', async (msg) => {
+  
+    if (!msg){
+      return null
+    }
+      
+    const data = await msg.content.toString();
+    acceptedOrders.ack(msg)
+    return data
+  }, {
+    noAck: false,
+  });
 
-  if (!msg){
-    return null
-  }
-    
-  const data = msg.content.toString();
-  console.log('FILA:', data)
-
-  acceptedOrders.ack(msg);   
-}, {
-  noAck: false,
-});
+}
 
 
-  console.log('🟢 Consumidor orders.accepted.queue ativo');

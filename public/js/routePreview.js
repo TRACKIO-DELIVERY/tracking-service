@@ -1,4 +1,9 @@
-export function showRoutePreview(map, { origem, destino }) {
+
+
+export async function showRoutePreview(map) {
+  const coordsStored = localStorage.getItem('coords')
+  const coords = JSON.parse(coordsStored)
+  
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer({
     suppressMarkers: true,
@@ -11,8 +16,8 @@ export function showRoutePreview(map, { origem, destino }) {
 
   directionsService.route(
     {
-      origin: origem,
-      destination: destino,
+      origin: coords.origin,
+      destination: coords.destination,
       travelMode: google.maps.TravelMode.DRIVING,
     },
     (result, status) => {
@@ -21,7 +26,7 @@ export function showRoutePreview(map, { origem, destino }) {
 
         // Marcador de origem
         new google.maps.Marker({
-          position: origem,
+          position: coords.origin,
           map: map,
           label: 'A',
           title: 'Origem',
@@ -29,7 +34,7 @@ export function showRoutePreview(map, { origem, destino }) {
 
         // Marcador de destino
         new google.maps.Marker({
-          position: destino,
+          position: coords.destination,
           map: map,
           label: 'B',
           title: 'Destino',

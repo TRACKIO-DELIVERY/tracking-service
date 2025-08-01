@@ -21,47 +21,64 @@
         const socket = io("http://localhost:3000");
 
         const { initMap } = await import('/js/mapSetup.js');
+        const { getCoords } = await import ('/js/getCoords.js')
         const { showRoutePreview } = await import('/js/routePreview.js');
-        const { startMockTrajectory } = await import('/js/mockTrajectory.js');
 
-        console.log(window.location.pathname.split("/").pop())
-        const map = initMap(-6.146837279661337, -38.20538841712638);
-        
         const orderId = window.location.pathname.split("/").pop()
-        socket.emit('join_order', {orderId})
-        socket.on("route_ready", (data) => {
-          console.log("Rota liberada para visualização:", data);
-        });
-        let deliverMarker = null;
-      socket.on("location_update", (coords) => {
-        const { latitude, longitude } = coords;
 
-        const position = { lat: latitude, lng: longitude };
-
-        var newCenter = new google.maps.LatLng(latitude, longitude);
-        map.panTo(newCenter)
-
-        if (!deliverMarker) {
-          deliverMarker = new google.maps.Marker({
-            position,
-            map,
-            title: 'Entregador',
-            icon: {
-              url: '/img/deliverPerson.png',
-              scaledSize: new google.maps.Size(40, 40),
-            },
-          });
-        } else {
-          //att a posição do marcador
-          deliverMarker.setPosition(position);
+        //-- Salva no localstorage a rota
+        await getCoords(orderId)
+        
+        // -- Inicia mapa e preview com as coords 
+        const coordsStored =  localStorage.getItem('coords')
+        const coords = JSON.parse(coordsStored)
+   
+        if (!coords){
+          console.log('coords invalidas')
+          return
         }
+
+        const map = initMap(coords.origin.lat, coords.origin.lng);
+
+        showRoutePreview(map)
+
+        // -- entra na sala do pedido
+    
+        socket.emit('join_order', orderId)
+        
+        // --  adiciona o marcador sempre que é enviada a nova localização
+        let deliverMarker = null;
+        socket.on("location_update", (coords) => {
+          const { latitude, longitude } = coords;
+
+          const position = { lat: latitude, lng: longitude };
+
+          var newCenter = new google.maps.LatLng(latitude, longitude);
+          map.panTo(newCenter)
+
+          if (!deliverMarker) {
+            deliverMarker = new google.maps.Marker({
+              position,
+              map,
+              title: 'Entregador',
+              icon: {
+                url: '/img/deliverPerson.png',
+                scaledSize: new google.maps.Size(40, 40),
+              },
+            });
+          } else {
+        
+            deliverMarker.setPosition(position);
+          }
       });
         
       };
     </script>
     <script
-      src="https://maps.googleapis.com/maps/api/js?key=KEY&libraries=maps&v=beta&callback=initApp"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOtpSq1e2acadIZ4D5-VXvXIfAAITSCVw&libraries=maps&v=beta&callback=initApp"
       defer
     ></script>
   </body>
 </html>
+
+

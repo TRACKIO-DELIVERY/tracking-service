@@ -1,10 +1,12 @@
 import path from 'path';
 import express from 'express';
 import { getIO } from '../sockets/trackingSockets.ts';
-import { orderInMemo } from '../data/order.ts';
+import { coordsInMemo, orderInMemo } from '../data/order.ts';
 import { acceptedOrderSender } from '../broker/sender/acceptedOrderSender.ts';
 import { inRouteOrdersender } from '../broker/sender/inRouteOrderSender.ts';
 import { deliveredOrderSender } from '../broker/sender/deliveredOrderSender.ts';
+import { lastPositionOrderSender } from '../broker/sender/lastPositionOrderSender.ts';
+import { selectTrackingCoordsByOrderId } from '../db/getTrackingCoords.ts';
 
 type Response = express.Response;
 type Request = express.Request;
@@ -17,7 +19,12 @@ export function renderDeliveryMap(req: Request, res: Response) {
 }
 
 export async function getTrackingCoords(req: Request, res: Response) {
-  //aqui vai ser pela fila, pegando o id vindo do app
+  const {orderId} = req.body
+
+  const data = await selectTrackingCoordsByOrderId(orderId)
+  return res.status(200).json({
+    coords: data
+  })
 }
 
 export async function acceptedOrder(req:Request, res:Response){
@@ -29,7 +36,7 @@ export async function acceptedOrder(req:Request, res:Response){
   orderInMemo[orderId] = {
     orderId
   }
-
+  console.log('order aceita', orderId)
   res.status(200).json({message: "Order accepted"})
 }
 
@@ -75,7 +82,7 @@ export async function sendOrderToInRouteQueue(req: Request, res: Response){
       await inRouteOrdersender(data)
 
      res.status(200).json({
-      message: "Order sended to accepted queue",
+      message: "Order sended to in route queue",
     })
   } catch (error) {
     console.error("Error when sending order:", error);
@@ -92,7 +99,24 @@ export async function sendOrderToFinishidQueue(req: Request, res: Response){
       await deliveredOrderSender(data)
 
      res.status(200).json({
-      message: "Order sended to accepted queue",
+      message: "Order sended to delivered queue",
+    })
+  } catch (error) {
+    console.error("Error when sending order:", error);
+    res.status(400).json({
+     error: "Order could not be send", 
+    })
+  }
+}
+
+export async function sendCoordsToLastPositionQueue(req: Request, res: Response){
+  const data = req.body
+
+  try {
+      await lastPositionOrderSender(data)
+
+     res.status(200).json({
+      message: "Order sended to last-position queue",
     })
   } catch (error) {
     console.error("Error when sending order:", error);

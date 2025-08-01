@@ -1,0 +1,18 @@
+
+services:
+  tracking-server:
+    build:
+      context: .
+    container_name: tracking_service_node
+    ports:
+      - '3000:3000'
+    env_file:
+      - '.env'
+    networks:
+      - order_service_local_network
+    volumes:
+      - .:/app
+
+networks:
+  order_service_local_network:
+    external: true
