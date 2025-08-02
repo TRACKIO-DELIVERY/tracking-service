@@ -72,7 +72,7 @@ export async function sendOrderToAccptedQueue(req: Request, res: Response){
     })
   } catch (error) {
     console.error("Error when sending order:", error);
-    res.status(400).json({
+    return res.status(400).json({
      error: "Order could not be send", 
     })
   }

@@ -7,7 +7,6 @@ type Request = express.Request;
 type Next = express.NextFunction
 
 function authenticateToken(req: Request, res:Response, next:Next) {
-
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(401).json({ error: 'Token ausente' });
 
@@ -15,9 +14,12 @@ function authenticateToken(req: Request, res:Response, next:Next) {
 
   if (!token) return res.status(401).json({ error: 'Token inválido' });
 
-  jwt.verify(token, secret, (err) => {
-    if (err) return res.status(403).json({ error: 'Token inválido ou expirado' });
-
+  jwt.verify(token, secret, (err,decoded) => {
+    if (err) {
+      console.log(err.message)
+      return res.status(403).json({ error: 'Token inválido ou expirado' });
+    }
+    console.log('Token válido:', decoded);
     next();
   });
 }
