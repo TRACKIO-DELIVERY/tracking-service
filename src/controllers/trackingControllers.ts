@@ -1,7 +1,7 @@
 import path from 'path';
 import express from 'express';
 import { getIO } from '../sockets/trackingSockets.ts';
-import { coordsInMemo, orderInMemo } from '../data/order.ts';
+import { orderInMemo } from '../data/order.ts';
 import { acceptedOrderSender } from '../broker/sender/acceptedOrderSender.ts';
 import { inRouteOrdersender } from '../broker/sender/inRouteOrderSender.ts';
 import { deliveredOrderSender } from '../broker/sender/deliveredOrderSender.ts';
@@ -14,6 +14,8 @@ type Request = express.Request;
 export function getHealth(req: Request, res: Response) {
   res.status(200).json({ message: 'OK' });
 }
+
+// map
 export function renderDeliveryMap(req: Request, res: Response) {
   res.sendFile(path.resolve('public', 'map.html'));
 }
@@ -27,6 +29,7 @@ export async function getTrackingCoords(req: Request, res: Response) {
   })
 }
 
+// tracking
 export async function acceptedOrder(req:Request, res:Response){
   const {orderId} = req.body
 
@@ -43,12 +46,12 @@ export async function acceptedOrder(req:Request, res:Response){
 export async function startRoute(req: Request, res: Response){
   const {orderId} = req.body
 
-  // const existingOrder = orderInMemo[orderId]
-  // if(!existingOrder) {
-  //   return res.status(404).json({
-  //     error: "Order not found", 
-  //   })
-  // }
+  const existingOrder = orderInMemo[orderId]
+  if(!existingOrder) {
+    return res.status(404).json({
+      error: "Order not found", 
+    })
+  }
 
   res.status(200).json({
     message: "Route is starting",
@@ -69,7 +72,7 @@ export async function sendOrderToAccptedQueue(req: Request, res: Response){
     })
   } catch (error) {
     console.error("Error when sending order:", error);
-    res.status(400).json({
+    return res.status(400).json({
      error: "Order could not be send", 
     })
   }

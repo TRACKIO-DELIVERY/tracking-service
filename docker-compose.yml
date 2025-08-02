@@ -1,3 +1,5 @@
+volumes:
+  grafana-storage: {}
 
 services:
   tracking-server:
@@ -12,6 +14,31 @@ services:
       - order_service_local_network
     volumes:
       - .:/app
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - '9090:9090'
+    networks:
+      - order_service_local_network
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - '3001:3000'
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - order_service_local_network
+
 
 networks:
   order_service_local_network:
