@@ -243,7 +243,7 @@ router.post('/track/queue/in-route', authenticateToken, sendOrderToInRouteQueue)
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/track/queue/finished', authenticateToken ,sendOrderToFinishidQueue)
+router.post('/track/queue/finished', authenticateToken, sendOrderToFinishidQueue)
 
-router.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
+router.use('/track/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 export default router;
