@@ -14,24 +14,9 @@
 
     <!-- socket.io -->
     <script src="https://trackio.amisahdev.com.br/track/socket.io/socket.io.js"></script>
-
-    <!-- Google Maps API -->
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOtpSq1e2acadIZ4D5-VXvXIfAAITSCVw&libraries=maps&v=beta&callback=initApp"
-      defer
-    ></script>
   </head>
   <body>
     <div id="map"></div>
-
-    <!-- global initApp -->
-    <!-- <script>
-      window.initApp = () => {
-        import('./app.html').then(mod => {
-          mod.default(); 
-        });
-      };
-    </script> -->
 
   <script type="module">
       window.initApp = async () => {
@@ -45,7 +30,7 @@
         try {
           const response = await fetch("https://trackio.amisahdev.com.br/track/route-preview", {
             method: "POST",
-            headers: { "Content-Type": "text/html" },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ orderId }),
           });
 
@@ -132,5 +117,9 @@
         });
       }
   </script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOtpSq1e2acadIZ4D5-VXvXIfAAITSCVw&libraries=maps&v=beta&callback=initApp"
+      defer
+    ></script>
   </body>
 </html>
