@@ -25,13 +25,14 @@ app.use(trackingRoutes);
 setupSocket(server);
 
 //metricas
-const metricsMiddleware = promBundle({includeMethod: true, includePath: true})
+const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 app.use(metricsMiddleware)
 
 const PORT = env.PORT || 3000;
+
 server.listen(PORT,  () => {
   logging.info('Starting server')
-  
+ 
   console.log(`Servidor ouvindo na porta: ${PORT}`);
   console.log('Swagger em http://localhost/api/track/docs')
   console.log('Grafana em http://localhost:3001')
