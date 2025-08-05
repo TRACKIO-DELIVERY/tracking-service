@@ -69,7 +69,7 @@ export async function sendOrderToAccptedQueue(req: Request, res: Response){
 
   try {
       await acceptedOrderSender(data)
-
+      console.log("Enviou para fila de aceitos", data)
      res.status(200).json({
       message: "Order sended to accepted queue",
     })
@@ -86,7 +86,7 @@ export async function sendOrderToInRouteQueue(req: Request, res: Response){
 
   try {
       await inRouteOrdersender(data)
-
+    console.log("Enviou para fila de em rota", data)
      res.status(200).json({
       message: "Order sended to in route queue",
     })
@@ -103,7 +103,7 @@ export async function sendOrderToFinishidQueue(req: Request, res: Response){
 
   try {
       await deliveredOrderSender(data)
-
+      console.log("Enviou para fila de entregues", data)
      res.status(200).json({
       message: "Order sended to delivered queue",
     })
