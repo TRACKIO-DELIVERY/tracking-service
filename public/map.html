@@ -25,17 +25,16 @@
     <div id="map"></div>
 
     <!-- global initApp -->
-    <script>
+    <!-- <script>
       window.initApp = () => {
-        import('./app.js').then(mod => {
+        import('./app.html').then(mod => {
           mod.default(); 
         });
       };
-    </script>
+    </script> -->
 
-    <!-- Main -->
-    <script type="module">
-      export default async function main() {
+  <script type="module">
+      window.initApp = async () => {
         const socket = io("https://trackio.amisahdev.com.br", {
           path: "/track/socket.io",
           transports: ["websocket"],
@@ -46,7 +45,7 @@
         try {
           const response = await fetch("https://trackio.amisahdev.com.br/track/route-preview", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "text/html" },
             body: JSON.stringify({ orderId }),
           });
 
@@ -132,6 +131,6 @@
           }
         });
       }
-    </script>
+  </script>
   </body>
 </html>
