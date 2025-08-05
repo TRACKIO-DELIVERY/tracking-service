@@ -8,6 +8,7 @@ const logger = getLogger()
 
 export function registerTrackingSocket(server: HttpServer) {
   io = new Server(server, {
+    path: '/track/socket.io/',
     cors: {
       origin: '*', 
     },

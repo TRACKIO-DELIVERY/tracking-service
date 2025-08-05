@@ -1,6 +1,4 @@
 
-
-export async function showRoutePreview(map) {
   const coordsStored = localStorage.getItem('coords')
   const coords = JSON.parse(coordsStored)
   
@@ -44,4 +42,4 @@ export async function showRoutePreview(map) {
       }
     },
   );
-}
+
