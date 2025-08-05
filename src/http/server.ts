@@ -15,17 +15,17 @@ const server = http.createServer(app);
 //tracking
 app.use(express.json());
 app.use(express.static(path.resolve('public')));
-app.use('/api/', trackingRoutes);
+app.use(trackingRoutes);
 
 //socket
 setupSocket(server);
 
 //metricas
-const metricsMiddleware = promBundle({includeMethod: true, includePath: true})
+const metricsMiddleware = promBundle({ includeMethod: true, includePath: true })
 app.use(metricsMiddleware)
 
 const PORT = env.PORT || 3000;
-server.listen(PORT,  () => {
+server.listen(PORT, () => {
   console.log(`Servidor ouvindo na porta: ${PORT}`);
   console.log('Swagger em http://localhost/api/docs')
   console.log('Grafana em http://localhost:3001')
