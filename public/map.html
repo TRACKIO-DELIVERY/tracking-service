@@ -11,11 +11,17 @@
         height: 100vh;
       }
     </style>
+     </style>
+     
+      <script src="https://trackio.amisahdev.com.br/track/socket.io/socket.io.js"></script>
+      <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOtpSq1e2acadIZ4D5-VXvXIfAAITSCVw&libraries=maps&v=beta&callback=initApp"
+      defer
+    ></script>
   </head>
   <body>
     <div id="map"></div>
 
-    <script src="/socket.io/socket.io.js"></script>
     <script type="module">
       window.initApp = async () => {
         const socket = io("https://trackio.amisahdev.com.br", {
@@ -106,8 +112,6 @@
           },
         );
 
-
-
         // -- entra na sala do pedido
     
         socket.emit('join_order', orderId)
@@ -140,10 +144,6 @@
         
       };
     </script>
-    <script
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAOtpSq1e2acadIZ4D5-VXvXIfAAITSCVw&libraries=maps&v=beta&callback=initApp"
-      defer
-    ></script>
   </body>
 </html>
 
