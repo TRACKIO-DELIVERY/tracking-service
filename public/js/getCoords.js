@@ -1,7 +1,7 @@
 export async function getCoords (orderId) {
     try {
         const response = await fetch(
-            "http://localhost:3000/api/track/route-preview", {
+            "http://trackio.amisahdev.com.br/track/route-preview", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', 

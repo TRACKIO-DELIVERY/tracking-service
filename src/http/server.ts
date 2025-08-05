@@ -19,7 +19,7 @@ const server = http.createServer(app);
 //tracking
 app.use(express.json());
 app.use(express.static(path.resolve('public')));
-app.use('/api/', trackingRoutes);
+app.use(trackingRoutes);
 
 //socket
 setupSocket(server);

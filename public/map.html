@@ -18,7 +18,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <script type="module">
       window.initApp = async () => {
-        const socket = io("http://localhost:3000");
+        const socket = io("http://trackio.amisahdev.com.br");
 
         const { initMap } = await import('/js/mapSetup.js');
         const { getCoords } = await import ('/js/getCoords.js')
