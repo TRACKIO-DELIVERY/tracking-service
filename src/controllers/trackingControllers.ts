@@ -51,7 +51,6 @@ export async function startRoute(req: Request, res: Response){
 
   const existingOrder = orderInMemo[orderId]
   if(!existingOrder) {
-    logger.warning('Order id was not found while trying to start route')
     return res.status(404).json({
       error: "Order not found", 
     })
