@@ -1,7 +1,10 @@
 import { Server } from 'socket.io';
 import { Server as HttpServer } from 'http';
+import { getLogger } from '../config/logging.ts';
 
 let io: Server;
+
+const logger = getLogger()
 
 export function registerTrackingSocket(server: HttpServer) {
   io = new Server(server, {
@@ -11,11 +14,12 @@ export function registerTrackingSocket(server: HttpServer) {
   });
 
   io.on('connection', (socket) => {
+    logger.info('A socket is connected')
     console.log(`Nova conexão: ${socket.id}`);
 
     // -- Sala do pedido
     socket.on(`join_order`, (orderId) => {
-
+      logger.info(`Sockets joined order: ${orderId} room`)
       const room = `order-${orderId}`
       socket.join(room);
 
@@ -45,12 +49,14 @@ export function registerTrackingSocket(server: HttpServer) {
       
       const room = `order-${orderId}`
       io.to(room).emit("route_ready", () => {
+        logger.info(`Socket room to order: ${orderId} is ready`)
         console.log("Rota pronta")
       })
 
     });
 
     socket.on('disconnect', () => {
+      logger.info('A socket was disconected')
       console.log(`Desconectado: ${socket.id}`);
     });
   });

@@ -7,9 +7,12 @@ import { inRouteOrdersender } from '../broker/sender/inRouteOrderSender.ts';
 import { deliveredOrderSender } from '../broker/sender/deliveredOrderSender.ts';
 import { lastPositionOrderSender } from '../broker/sender/lastPositionOrderSender.ts';
 import { selectTrackingCoordsByOrderId } from '../db/getTrackingCoords.ts';
+import { getLogger } from '../config/logging.ts';
 
 type Response = express.Response;
 type Request = express.Request;
+
+const logger = getLogger()
 
 export function getHealth(req: Request, res: Response) {
   res.status(200).json({ message: 'OK' });
@@ -48,6 +51,7 @@ export async function startRoute(req: Request, res: Response){
 
   const existingOrder = orderInMemo[orderId]
   if(!existingOrder) {
+    logger.warning('Order id was not found while trying to start route')
     return res.status(404).json({
       error: "Order not found", 
     })
